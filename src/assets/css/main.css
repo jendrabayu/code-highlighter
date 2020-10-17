@@ -1,0 +1,27 @@
+.bg_primary{
+    background-color: #0077b6;
+    color: white;
+    outline: none;
+}
+
+.bg_primary:hover{
+  background-color: #023e8a;
+  color: white;
+}
+
+.bg_primary_outline{
+  background-color: white;
+  border: 3px solid #0077b6;
+  color: #333;
+}
+
+.bg_auth {
+  background: linear-gradient(
+      to right top,
+      rgba(3, 4, 94, .9) 0%,
+      rgba(0, 150, 199, 1) 50%,
+      rgba(144, 224, 239, 1) 100%
+    ),
+    linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 1));
+}
+
