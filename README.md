@@ -1,4 +1,4 @@
-# cool-code
+# code-highlighter
 
 ## Project setup
 ```

@@ -1,6 +1,6 @@
 <template>
   <main>
-    <header>code highligter</header>
+    <header>code highlighter</header>
     <div id="content">
       <h1 v-if="authFor == 'login'" class="title"><span>Log</span> in</h1>
       <h1 v-else-if="authFor == 'register'" class="title">
