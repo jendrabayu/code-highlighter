@@ -2,7 +2,8 @@
   <div class="control">
     <button
       :type="type"
-      :class="['bg_primary', isLoading, isDanger]"
+      :class="['is-link', isDanger, className, isLoading]"
+      :disabled="disabled"
       class="button px-5"
       @click="$emit('click', $event.target.value)"
     >
@@ -23,6 +24,13 @@ export default {
       default: false,
     },
     hasLoading: {
+      type: Boolean,
+      default: false,
+    },
+    className: {
+      type: String,
+    },
+    disabled: {
       type: Boolean,
       default: false,
     },

@@ -1,57 +1,78 @@
 <template>
-  <main>
-    <header>code highlighter</header>
-    <div id="content">
-      <h1 v-if="authFor == 'login'" class="title"><span>Log</span> in</h1>
-      <h1 v-else-if="authFor == 'register'" class="title">
-        <span>Sign</span> up
-      </h1>
-      <ValidationObserver v-slot="{ handleSubmit }" ref="form">
-        <form @submit.prevent="handleSubmit(onSubmit)">
-          <v-alert-message
-            v-show="message.error || message.success"
-            :color="alertColor"
-            :message="alertMessage"
-            @close="clearMessage"
-          />
-          <ValidationProvider
-            name="username"
-            rules="required|min:3"
-            v-slot="{ errors }"
+  <main class="px-5">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-three-fifths">
+          <header
+            class="has-text-centered has-text-weight-light is-size-1-tablet is-size-3-mobile"
           >
-            <div class="field has-addons mb-1">
-              <v-input
-                :placeholder="placeholder"
-                :disabled="$store.state.user.progress"
-                :hasError="hasError(errors[0])"
-                :value="username"
-                v-model="username"
-              />
-
-              <div class="ml-2">
-                <v-button
-                  :hasLoading="$store.state.user.progress"
-                  :disabled="$store.state.user.progress"
-                  :hasError="hasError(errors[0])"
+            code highlighter
+          </header>
+          <div id="content">
+            <h1
+              v-if="authFor == 'login'"
+              class="title is-size-3 has-text-weight-light"
+            >
+              <span class="has-text-weight-bold">Log</span> in
+            </h1>
+            <h1
+              v-else-if="authFor == 'register'"
+              class="title is-size-3 has-text-weight-light"
+            >
+              <span class="has-text-weight-bold">Sign</span> up
+            </h1>
+            <ValidationObserver v-slot="{ handleSubmit }" ref="form">
+              <form @submit.prevent="handleSubmit(onSubmit)">
+                <v-alert-message
+                  v-show="message.error || message.success"
+                  :color="alertColor"
+                  :message="alertMessage"
+                  @close="clearMessage"
+                />
+                <ValidationProvider
+                  name="username"
+                  rules="required|min:3"
+                  v-slot="{ errors }"
                 >
-                  <slot name="button"></slot>
-                </v-button>
-              </div>
-            </div>
+                  <div class="field has-addons mb-1">
+                    <v-input
+                      :placeholder="placeholder"
+                      :disabled="$store.state.user.progress"
+                      :hasError="hasError(errors[0])"
+                      :value="username"
+                      v-model="username"
+                    />
 
-            <v-input-error :error="errors[0]" />
-            <p class="has-text-center is-size-6 mt-3">
-              <slot name="link"></slot>
-            </p>
-          </ValidationProvider>
-        </form>
-      </ValidationObserver>
+                    <div class="ml-2">
+                      <v-button
+                        :hasLoading="$store.state.user.progress"
+                        :disabled="$store.state.user.progress"
+                        :hasError="hasError(errors[0])"
+                      >
+                        <slot name="button"></slot>
+                      </v-button>
+                    </div>
+                  </div>
+
+                  <v-input-error :error="errors[0]" />
+                  <p class="has-text-center is-size-6 mt-3">
+                    <slot name="link"></slot>
+                  </p>
+                </ValidationProvider>
+              </form>
+            </ValidationObserver>
+          </div>
+          <footer class="has-text-centered mt-6">
+            <a
+              class="is-size-6 has-text-white"
+              href="https://github.com/jendrabayu"
+              target="blank"
+              >© 2020 by Jendra</a
+            >
+          </footer>
+        </div>
+      </div>
     </div>
-    <footer>
-      <a href="https://github.com/jendrabayu" target="blank"
-        >© 2020 by Jendra</a
-      >
-    </footer>
   </main>
 </template>
 
@@ -107,16 +128,23 @@ export default {
         this.$store
           .dispatch("user/register", this.username)
           .then(() => {
+            this.$toast.success({
+              title: "Registration is successfully",
+              message: "You Can Login Here",
+            });
             this.$router.push({
               name: "login",
               params: {
                 successMessage:
-                  "Registration is successful, Please login to your account",
+                  "Registration is successfully, Please login to your account",
               },
             });
           })
           .catch((error) => {
-            console.log(error);
+            this.$toast.error({
+              title: "Registration failed",
+              message: error,
+            });
             this.message.error = error;
             this.username = "";
             this.$refs.form.reset();
@@ -130,10 +158,18 @@ export default {
           this.$store
             .dispatch("user/login", this.username)
             .then(() => {
+              this.$toast.success({
+                title: "Login is successful",
+                message: "Welcome " + this.$store.state.user.name,
+              });
               this.$router.push({ name: "home" });
             })
             .catch((error) => {
-              console.log(error);
+              this.$toast.error({
+                title: "Login failed",
+                message: error,
+              });
+              this.$router.push({ name: "home" });
               this.message.error = error;
               this.username = "";
               this.$refs.form.reset();
@@ -174,19 +210,14 @@ export default {
 </script>
 
 <style scoped>
-.button .is-primary {
-  background-color: #27aaf0 !important;
-}
 main {
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
 }
 
 #content {
-  width: 50%;
   background-color: white;
   padding: 30px;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
@@ -194,47 +225,13 @@ main {
 
 .title {
   color: #26aaf0;
-  font-size: 2rem;
-}
-
-.title span {
-  font-weight: bold;
 }
 
 header {
   text-transform: uppercase;
   margin-bottom: 2rem;
-  font-size: 3rem;
   color: white;
-  font-weight: 200;
   text-shadow: 0px 4px 3px rgba(0, 0, 0, 0.4), 0px 8px 13px rgba(0, 0, 0, 0.1),
     0px 18px 23px rgba(0, 0, 0, 0.1);
-}
-
-footer {
-  margin-top: 2rem;
-}
-
-footer a {
-  color: white;
-  font-size: 0.8rem;
-}
-
-@media (max-width: 1024px) {
-  #content {
-    width: 60%;
-  }
-}
-@media (max-width: 768px) {
-  #content {
-    width: 70%;
-  }
-}
-@media (max-width: 650px) {
-  #content {
-    width: 90%;
-  }
-}
-@media (max-width: 425px) {
 }
 </style>

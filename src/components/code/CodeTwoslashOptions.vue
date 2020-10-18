@@ -2,7 +2,7 @@
   <ValidationProvider name="twoslash" rules="required" v-slot="{ errors }">
     <div class="field">
       <v-select-options
-        :data="twoslashes"
+        :data="$store.state.code.twoslashes"
         name="Twhoslash"
         :disabled="progress"
         @input="updateValue"
@@ -30,7 +30,6 @@ export default {
   },
   data() {
     return {
-      twoslashes: ["twoslash", "tsconfig"],
       selectedValue: "",
     };
   },

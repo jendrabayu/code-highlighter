@@ -13,6 +13,7 @@
     "boolean": "^3.0.1",
     "bulma": "^0.9.1",
     "core-js": "^3.6.5",
+    "cxlt-vue2-toastr": "^1.1.1",
     "date-and-time": "^0.14.1",
     "escape-goat": "^3.0.0",
     "file-saver": "^2.0.2",

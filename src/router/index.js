@@ -57,14 +57,8 @@ const routes = [
     }
 ]
 
-const router = new VueRouter({ mode: 'history', routes, base: '/code-highlighter/' })
+const router = new VueRouter({ mode: 'hash', routes, base: '/code-highlighter/' })
 
-/**
- * 
- * How protect routes ?
- * @see https://router.vuejs.org/guide/advanced/meta.html
- * 
- */
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires auth, check if logged in

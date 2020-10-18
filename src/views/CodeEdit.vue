@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-navbar></v-navbar>
+    <v-navbar />
     <main>
       <div class="container">
         <div class="columns is-centered">
@@ -118,9 +118,7 @@
 
 <script>
 import VNavbar from "../components/VNavbar";
-import axios from "axios";
-import { BASE_API_URL } from "../constant";
-axios.defaults.url = BASE_API_URL;
+import { parseLang } from "../utils/index";
 export default {
   components: { VNavbar },
   props: {
@@ -153,7 +151,7 @@ export default {
           userId: this.$store.state.user.id,
           codeId: this.id,
           fileName: this.fileName,
-          lang: this.getLang(),
+          lang: parseLang(this.fileName),
           code: this.code,
           highlight: this.highlight,
         })
@@ -161,10 +159,6 @@ export default {
           console.log(result);
         })
         .catch((error) => console.log(error));
-    },
-    getLang() {
-      const lang = this.fileName.replace(" ", "").split(".");
-      return lang[lang.length - 1];
     },
     getOldCode() {
       this.$store

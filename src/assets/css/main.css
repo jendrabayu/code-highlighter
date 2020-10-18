@@ -7,11 +7,12 @@
 .bg_primary:hover{
   background-color: #023e8a;
   color: white;
+  outline: none;
 }
 
 .bg_primary_outline{
   background-color: white;
-  border: 3px solid #0077b6;
+  border: 2px solid #0077b6;
   color: #333;
 }
 

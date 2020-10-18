@@ -2,28 +2,32 @@
   <div>
     <div class="code_item_header">
       <div class="buttons mb-0">
-        <router-link :to="{ path: `code/${code.id}` }" class="button is-small"
+        <router-link
+          :to="{ path: `code/${code.id}` }"
+          class="button is-warning is-small"
           ><span> Edit</span>
           <span class="icon is-small"><i class="far fa-edit"></i> </span
         ></router-link>
-        <button
-          :class="{ 'is-loading': deleteProgress }"
+
+        <v-button-icon
+          :progress="deleteProgress"
           :disabled="deleteProgress"
-          class="button is-small"
+          title="Delete"
+          color="is-danger"
+          size="is-small"
+          icon="far fa-trash-alt"
           @click="deleteCode"
-        >
-          <span>Delete</span>
-          <span class="icon is-small"><i class="far fa-trash-alt"></i></span>
-        </button>
-        <button
-          :class="{ 'is-loading': downloadProgress }"
+        />
+
+        <v-button-icon
+          :progress="downloadProgress"
           :disabled="downloadProgress"
-          class="button is-small"
+          title="Download"
+          color="is-primary"
+          size="is-small"
+          icon="fas fa-download"
           @click="downloadCode"
-        >
-          <span>Download</span>
-          <span class="icon is-small"><i class="fas fa-download"></i></span>
-        </button>
+        />
       </div>
       <div>
         <small>{{ getCreatedAt }}</small>
@@ -41,21 +45,20 @@
 <script>
 import DataCode from "../preset/DataCode";
 import swal from "sweetalert";
+import VButtonIcon from "../VButtonIcon";
 import { saveAs } from "file-saver";
 import date from "date-and-time";
 export default {
   name: "v-code-item",
   components: {
     DataCode,
+    VButtonIcon,
   },
   props: {
     dataCode: {
-      type: Object,
+      type: [Array, Object],
       required: true,
     },
-  },
-  created() {
-    // console.log(this.dataCode);
   },
   data() {
     return {
@@ -154,9 +157,5 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.2rem;
-}
-
-.button {
-  border: 1.5px solid #273a6e;
 }
 </style>

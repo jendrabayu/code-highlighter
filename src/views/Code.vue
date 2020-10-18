@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-navbar></v-navbar>
-    <main>
+    <main class="px-5">
       <div class="container">
         <nav class="filter_container mt-6">
-          <div class="entries_container">
+          <div class="filter_left">
             <p class="mr-2">Show</p>
             <div class="select mr-2">
               <select v-model="limit" @change="getCodes">
@@ -13,32 +13,33 @@
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
-                <option value="">all</option>
+                <option value="1000">1000</option>
               </select>
             </div>
             <p>entries</p>
           </div>
-
-          <ul>
-            <li class="mr-5">Sorted</li>
-            <li class="mr-2">
-              <div class="select">
-                <select v-model="sortBy" @change="getCodes">
-                  <option value="fileName">File name</option>
-                  <option value="createdAt">Created at</option>
-                  <option value="lang">Languange</option>
-                </select>
-              </div>
-            </li>
-            <li>
-              <div class="select">
-                <select v-model="sort" @change="getCodes">
-                  <option value="ASC">A-Z</option>
-                  <option value="DESC">Z-A</option>
-                </select>
-              </div>
-            </li>
-          </ul>
+          <div class="filter_right">
+            <ul>
+              <li class="mr-5">Sorted</li>
+              <li class="mr-2">
+                <div class="select">
+                  <select v-model="sortBy" @change="getCodes">
+                    <option value="fileName">File name</option>
+                    <option value="createdAt">Created at</option>
+                    <option value="lang">Languange</option>
+                  </select>
+                </div>
+              </li>
+              <li>
+                <div class="select">
+                  <select v-model="sort" @change="getCodes">
+                    <option value="ASC">A-Z</option>
+                    <option value="DESC">Z-A</option>
+                  </select>
+                </div>
+              </li>
+            </ul>
+          </div>
         </nav>
         <hr class="section_border" />
         <div class="main_content">
@@ -46,7 +47,12 @@
             v-if="this.$store.state.code.isLoading"
             class="progress_container"
           >
-            <div class="lds-facebook">
+            <div class="lds-roller">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
               <div></div>
               <div></div>
               <div></div>
@@ -57,7 +63,6 @@
               v-for="(code, index) in this.$store.state.code.codes"
               :key="index"
               class="column is-6"
-              style="height: auto"
             >
               <v-code-item :dataCode="code"></v-code-item>
             </div>
@@ -86,13 +91,13 @@ export default {
       isActiveHighlight: 1,
     };
   },
+  beforeCreate() {
+    document.body.className = "";
+  },
   created() {
     this.getCodes();
   },
   methods: {
-    lala() {
-      console.log(this.sortBy);
-    },
     getCodes() {
       this.progress = true;
       const data = {
@@ -109,9 +114,6 @@ export default {
       this.progress = false;
     },
   },
-  beforeCreate() {
-    document.body.className = "";
-  },
 };
 </script>
 
@@ -120,7 +122,7 @@ main {
   min-height: 100vh;
 }
 
-.entries_container {
+.filter_left {
   display: flex;
   align-items: center;
 }
@@ -156,41 +158,91 @@ main {
   align-items: center;
 }
 
-.lds-facebook {
+@media (max-width: 625px) {
+}
+
+.lds-roller {
   display: inline-block;
   position: relative;
   width: 80px;
   height: 80px;
 }
-.lds-facebook div {
-  display: inline-block;
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+.lds-roller div:after {
+  content: " ";
+  display: block;
   position: absolute;
-  left: 8px;
-  width: 16px;
-  background: #12aadc;
-  animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #3298dc;
+  margin: -4px 0 0 -4px;
 }
-.lds-facebook div:nth-child(1) {
-  left: 8px;
-  animation-delay: -0.24s;
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
 }
-.lds-facebook div:nth-child(2) {
-  left: 32px;
-  animation-delay: -0.12s;
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
 }
-.lds-facebook div:nth-child(3) {
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 68px;
   left: 56px;
-  animation-delay: 0;
 }
-@keyframes lds-facebook {
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes lds-roller {
   0% {
-    top: 8px;
-    height: 64px;
+    transform: rotate(0deg);
   }
-  50%,
   100% {
-    top: 24px;
-    height: 32px;
+    transform: rotate(360deg);
   }
 }
 </style>

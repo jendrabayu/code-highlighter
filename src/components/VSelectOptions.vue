@@ -9,7 +9,7 @@
         @change="$emit('input', $event.target.value)"
         :disabled="disabled"
       >
-        <option disabled selected>Select {{ name }}</option>
+        <option disabled selected value="">Select {{ name }}</option>
         <option
           v-for="(data, index) in data"
           :key="index"

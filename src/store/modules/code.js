@@ -2,6 +2,7 @@ import { BASE_API_URL } from '../../constant'
 import axios from 'axios'
 import { stringifyUrl } from 'query-string'
 import clean from 'lodash-clean'
+import toast from 'cxlt-vue2-toastr'
 
 axios.defaults.baseURL = BASE_API_URL;
 
@@ -9,7 +10,10 @@ const code = {
     namespaced: true,
     state: () => ({
         codes: [],
-        isLoading: false
+        isLoading: false,
+        progress: false,
+        languages: [],
+        twoslashes: ['twoslash', 'tsconfig']
     }),
     getters: {
 
@@ -27,6 +31,9 @@ const code = {
             if (index >= 0) {
                 state.codes.splice(index, 1)
             }
+        },
+        addLanguages(state, data) {
+            state.languages = data
         }
     },
     actions: {
@@ -36,13 +43,13 @@ const code = {
             const { page, limit, sortBy, sort, highlighted } = filter
             const urlObject = {
                 url: '/code/list',
-                query: {
+                query: clean({
                     page: page,
                     limit: limit,
                     sortBy: sortBy,
                     sort: sort,
                     highlighted: highlighted
-                }
+                })
             }
 
             /**
@@ -174,6 +181,22 @@ const code = {
                     reject(error)
                 })
             })
+        },
+        getLanguages(ctx) {
+            axios.get("/options")
+                .then((response) => {
+                    const responseData = response.data;
+                    if (responseData.success && !responseData.error) {
+                        ctx.commit('addLanguages', responseData.data.languages)
+                    }
+                })
+                .catch((error) => {
+                    toast.error({
+                        title: "Failed to get languages list",
+                        message: error,
+                    });
+                    console.log(error)
+                });
         }
 
     }

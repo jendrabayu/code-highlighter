@@ -1,9 +1,15 @@
 <template>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
+  <nav
+    class="navbar is-info py-2"
+    role="navigation"
+    aria-label="main navigation"
+  >
     <div class="container">
       <div class="navbar-brand">
-        <router-link class="navbar-item" :to="{ name: 'home' }"
-          >code highligter</router-link
+        <router-link
+          class="navbar-item is-uppercase is-size-5 has-text-weight-medium"
+          :to="{ name: 'home' }"
+          >code highlighter</router-link
         >
 
         <a
@@ -25,8 +31,6 @@
         class="navbar-menu"
         :class="{ 'is-active': isActive }"
       >
-        <!-- <div class="navbar-start"></div> -->
-
         <div class="navbar-end">
           <router-link class="navbar-item mr-2" :to="{ name: 'home' }"
             >Home</router-link
@@ -35,7 +39,7 @@
             >Code</router-link
           >
           <div class="buttons">
-            <button @click="handleLogout" class="button is-light">
+            <button @click="handleLogout" class="button is-danger">
               Logout
             </button>
           </div>
@@ -78,21 +82,3 @@ export default {
   },
 };
 </script>
-
-<style  scoped>
-.navbar {
-  min-height: 4rem !important;
-  background-color: #12aadc;
-}
-
-.navbar-end .navbar-item {
-  color: white;
-}
-.navbar-brand .navbar-item {
-  color: white;
-  text-transform: uppercase;
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: 0.1rem;
-}
-</style>

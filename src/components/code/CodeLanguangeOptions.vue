@@ -3,7 +3,7 @@
     <div class="field">
       <v-select-options
         name="Languange"
-        :data="languangesList"
+        :data="$store.state.code.languages"
         :disabled="progress"
         @input="updateValue"
         :hasError="getError(errors[0])"
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import VSelectOptions from "../VSelectOptions";
 import VInputError from "../VInputError";
 
@@ -34,30 +33,13 @@ export default {
       default: "",
     },
   },
-  data() {
-    return {
-      languangesList: [],
-    };
-  },
   created() {
-    this.getOptionsLanguange();
+    this.$store.dispatch("code/getLanguages");
   },
   methods: {
     getError(error) {
       if (error) return true;
       return false;
-    },
-    getOptionsLanguange() {
-      axios
-        .get("/options")
-        .then((response) => {
-          const responseData = response.data;
-          if (responseData.success && !responseData.error) {
-            this.languangesList = responseData.data.languages;
-            this.twoslashesList = responseData.data.twoslashes;
-          }
-        })
-        .catch((error) => console.log(error));
     },
     updateValue(event) {
       if (event) {

@@ -18,7 +18,6 @@
 <script>
 import VCodeItem from "./VCodeItem";
 export default {
-  name: "v-code-item-modal",
   components: { VCodeItem },
   props: {
     isActive: {
@@ -26,6 +25,7 @@ export default {
       default: false,
     },
     dataCode: {
+      type: [Object, Array],
       required: true,
     },
   },
@@ -39,6 +39,7 @@ export default {
   methods: {
     handleClose() {
       (this.active = false), (this.code = []);
+      this.$emit("close");
     },
   },
 };
