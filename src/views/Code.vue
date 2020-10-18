@@ -8,12 +8,13 @@
             <p class="mr-2">Show</p>
             <div class="select mr-2">
               <select v-model="limit" @change="getCodes">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="1000">1000</option>
+                <option
+                  v-for="(limit, index) in set.limit"
+                  :key="index"
+                  :value="limit"
+                >
+                  {{ limit }}
+                </option>
               </select>
             </div>
             <p>entries</p>
@@ -24,17 +25,26 @@
               <li class="mr-2">
                 <div class="select">
                   <select v-model="sortBy" @change="getCodes">
-                    <option value="fileName">File name</option>
-                    <option value="createdAt">Created at</option>
-                    <option value="lang">Languange</option>
+                    <option
+                      v-for="(sortby, index) in set.sortby"
+                      :key="index"
+                      :value="sortby"
+                    >
+                      {{ sortby }}
+                    </option>
                   </select>
                 </div>
               </li>
               <li>
                 <div class="select">
                   <select v-model="sort" @change="getCodes">
-                    <option value="ASC">A-Z</option>
-                    <option value="DESC">Z-A</option>
+                    <option
+                      v-for="(sort, index) in set.sort"
+                      :key="index"
+                      :value="sort"
+                    >
+                      {{ sort }}
+                    </option>
                   </select>
                 </div>
               </li>
@@ -43,24 +53,20 @@
         </nav>
         <hr class="section_border" />
         <div class="main_content">
-          <div
-            v-if="this.$store.state.code.isLoading"
-            class="progress_container"
-          >
-            <div class="lds-roller">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
+          <div v-if="this.$store.state.code.isLoading">
+            <v-loading-section />
           </div>
-          <div class="columns is-multiline mt-5">
+          <div class="py-6" v-show="$store.state.code.codes.length == 0">
+            <h1 class="is-size-3 has-text-centered has-text-weight-light">
+              Code Not Found!
+            </h1>
+          </div>
+          <div
+            v-show="$store.state.code.codes.length != 0"
+            class="columns is-multiline py-6"
+          >
             <div
-              v-for="(code, index) in this.$store.state.code.codes"
+              v-for="(code, index) in $store.state.code.codes"
               :key="index"
               class="column is-6"
             >
@@ -76,11 +82,13 @@
 <script>
 import VNavbar from "../components/VNavbar";
 import VCodeItem from "../components/code/VCodeItem";
+import VLoadingSection from "../components/VLoadingSection";
 
 export default {
   components: {
     VNavbar,
     VCodeItem,
+    VLoadingSection,
   },
   data() {
     return {
@@ -89,6 +97,11 @@ export default {
       sortBy: "fileName",
       sort: "ASC",
       isActiveHighlight: 1,
+      set: {
+        limit: [5, 10, 25, 50, 100, 1000],
+        sortby: ["fileName", "lang", "createdAt"],
+        sort: ["ASC", "DESC"],
+      },
     };
   },
   beforeCreate() {
@@ -127,21 +140,20 @@ main {
   align-items: center;
 }
 
-.progress_container {
-  padding: 100px 0;
-  position: absolute;
-  background-color: white;
-  height: 100%;
-  width: 100%;
-  z-index: 999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .filter_container {
   display: flex;
   justify-content: space-between;
+}
+
+@media (max-width: 625px) {
+  .filter_container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter_left {
+    margin-bottom: 1rem;
+  }
 }
 
 .main_content {
@@ -156,93 +168,5 @@ main {
 .filter_container ul {
   display: flex;
   align-items: center;
-}
-
-@media (max-width: 625px) {
-}
-
-.lds-roller {
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-.lds-roller div {
-  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  transform-origin: 40px 40px;
-}
-.lds-roller div:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #3298dc;
-  margin: -4px 0 0 -4px;
-}
-.lds-roller div:nth-child(1) {
-  animation-delay: -0.036s;
-}
-.lds-roller div:nth-child(1):after {
-  top: 63px;
-  left: 63px;
-}
-.lds-roller div:nth-child(2) {
-  animation-delay: -0.072s;
-}
-.lds-roller div:nth-child(2):after {
-  top: 68px;
-  left: 56px;
-}
-.lds-roller div:nth-child(3) {
-  animation-delay: -0.108s;
-}
-.lds-roller div:nth-child(3):after {
-  top: 71px;
-  left: 48px;
-}
-.lds-roller div:nth-child(4) {
-  animation-delay: -0.144s;
-}
-.lds-roller div:nth-child(4):after {
-  top: 72px;
-  left: 40px;
-}
-.lds-roller div:nth-child(5) {
-  animation-delay: -0.18s;
-}
-.lds-roller div:nth-child(5):after {
-  top: 71px;
-  left: 32px;
-}
-.lds-roller div:nth-child(6) {
-  animation-delay: -0.216s;
-}
-.lds-roller div:nth-child(6):after {
-  top: 68px;
-  left: 24px;
-}
-.lds-roller div:nth-child(7) {
-  animation-delay: -0.252s;
-}
-.lds-roller div:nth-child(7):after {
-  top: 63px;
-  left: 17px;
-}
-.lds-roller div:nth-child(8) {
-  animation-delay: -0.288s;
-}
-.lds-roller div:nth-child(8):after {
-  top: 56px;
-  left: 12px;
-}
-@keyframes lds-roller {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 </style>

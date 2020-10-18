@@ -3,7 +3,10 @@
     <v-navbar />
     <main>
       <div class="container">
-        <div class="columns is-centered">
+        <div v-if="code.length == 0" class="py-6">
+          <v-loading-section />
+        </div>
+        <div v-if="code.length != 0" class="columns is-centered">
           <div class="column is-full mt-6 box px-4 py-5">
             <h1 class="is-size-5">Edit Code</h1>
             <ValidationObserver v-slot="{ handleSubmit }" ref="form">
@@ -119,8 +122,9 @@
 <script>
 import VNavbar from "../components/VNavbar";
 import { parseLang } from "../utils/index";
+import VLoadingSection from "../components/VLoadingSection";
 export default {
-  components: { VNavbar },
+  components: { VNavbar, VLoadingSection },
   props: {
     id: {
       type: String,
@@ -143,6 +147,7 @@ export default {
   mounted() {},
   methods: {
     handleReset() {
+      this.code = "";
       this.getOldCode();
     },
     onSubmit() {
@@ -179,3 +184,9 @@ export default {
   },
 };
 </script>
+
+<style  scoped>
+.container {
+  position: relative;
+}
+</style>
